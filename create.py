@@ -1,17 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import python_chars
-import c_chars
-import html_chars
+import get_chars
 
 
-def get_key_percentages(char_count):
+def get_key_percentages(char_counts):
     chars = list("abcdefghijklmnopqrstuvwxyz`1234567890-=[];'\,./")
     chars.extend(["Shift", "Enter", "Spacebar", "Tab"])
     counts = [0]*len(chars)
     symbols = list("~!@#$%^&*()_+{}:\"|<>?")
     symbols_orig = list("`1234567890-=[];'\,./")
-    for i in char_count:
+    for i in char_counts:
         char = i[0]
         count = i[1]
         if char in chars:
@@ -49,21 +47,26 @@ def bar_graph_char_percentages(char_tuple, title=None):
     plt.bar(i, char_percentages, width, color="#A0A0A0")
     plt.title(title, **title_font)
     plt.xticks(i, chars, rotation="vertical", **labels_font)
-    plt.yticks(np.arange(0, 13.001, 1), **labels_font)
+    plt.yticks(np.arange(0, 12.001, 1), **labels_font)
     plt.xlabel("Keys", **axis_font)
     plt.ylabel("Percentage of total", **axis_font)
     plt.xlim([-1, N])
-    plt.ylim([0, 13])
+    plt.ylim([0, 12])
     plt.tight_layout()
-    plt.savefig("images/" + title.lower() + ".pdf", bbox_inches="tight", format="pdf")
-
-
-char_count_python = python_chars.char_count.items()
-char_count_c = c_chars.char_count.items()
-char_count_html = html_chars.char_count.items()
+    plt.savefig(
+        "images/" + title.lower() + "_bar.pdf",
+        bbox_inches="tight", format="pdf")
 
 
 if __name__ == "__main__":
-    bar_graph_char_percentages(get_key_percentages(char_count_python), title="Python")
-    bar_graph_char_percentages(get_key_percentages(char_count_c), title="C")
-    bar_graph_char_percentages(get_key_percentages(char_count_html), title="HTML")
+    char_counts_python = list(get_chars.get_chars("python")[0].items())
+    char_counts_c = list(get_chars.get_chars("c")[0].items())
+    char_counts_html = list(get_chars.get_chars("html")[0].items())
+    
+    char_percentages_python = get_key_percentages(char_counts_python)
+    char_percentages_c = get_key_percentages(char_counts_c)
+    char_percentages_html = get_key_percentages(char_counts_html)
+
+    bar_graph_char_percentages(char_percentages_python, title="Python")
+    bar_graph_char_percentages(char_percentages_c, title="C")
+    bar_graph_char_percentages(char_percentages_html, title="HTML")
