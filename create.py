@@ -58,11 +58,21 @@ def bar_graph_char_percentages(char_tuple, title=None):
         bbox_inches="tight", format="pdf")
 
 
+def red(percentage):
+    return(255 - 155/12*percentage)
+
+
+def red_chars(char_tuple):
+    char_reds = [red(percentage) for percentage in char_tuple[0]]
+    char_reds_pairs = list(zip(char_reds, char_tuple[1]))
+    return(sorted(char_reds_pairs))
+
+
 if __name__ == "__main__":
     char_counts_python = list(get_chars.get_chars("python")[0].items())
     char_counts_c = list(get_chars.get_chars("c")[0].items())
     char_counts_html = list(get_chars.get_chars("html")[0].items())
-    
+
     char_percentages_python = get_key_percentages(char_counts_python)
     char_percentages_c = get_key_percentages(char_counts_c)
     char_percentages_html = get_key_percentages(char_counts_html)
@@ -70,3 +80,7 @@ if __name__ == "__main__":
     bar_graph_char_percentages(char_percentages_python, title="Python")
     bar_graph_char_percentages(char_percentages_c, title="C")
     bar_graph_char_percentages(char_percentages_html, title="HTML")
+
+    #print(red_chars(char_percentages_python))
+    #print(red_chars(char_percentages_c))
+    print(red_chars(char_percentages_html))
